@@ -1,4 +1,4 @@
-# P2P Token Exchange Contract
+# (Toy-ish but secure) P2P Token Exchange Contract
 
 ## Introduction
 Ethereum provides the capability to program smart contract and a typical use case for smart contract is to issue new cryptocurrency based on  Ethereum blockchain, for example REP in Augur and SINGL in Singular DTV. Tokens can be exchanged in centralized exchanges like poloniex, but the centralized exchanges always charges for a fee and acting as a central point of failure if the exchange is hacked (e.g. bitfinex recently and Mt.Gox a while ago). This is especially bad for bulk exchanges of cryptocurrency where the fee value is high and the risk of default is high.  There is also a concern about privacy that the exchange knows some information about the token holder usually. 
