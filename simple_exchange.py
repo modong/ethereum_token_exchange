@@ -47,16 +47,12 @@ def initialize(secret, timeout, source, peer:address, token:address):
         self.peer = peer
         self.token = token
 
-def get_nounce():
-    log(type=Notice, text("!!!"), temp)
-    return ( load(self.nounce, chars=2):str )
-
 def get_secret():
     if self.is_initialized:
         return self.secret
 
 def transfer(nounce:str):
-    temp = sha3(nounce, chars=len(nounce)) 
+    temp = sha3(nounce, chars=len(nounce))
     if temp == self.secret and block.number < self.timeout:
         self.token.send_token(self.owner, self.token.get_balance(self), sender=self)
         if self.peer != 0:
@@ -73,7 +69,7 @@ goldToken = s.abi_contract(tokenCode, sender=bob)
 exchangeAlicePart = s.abi_contract(exchangeCode, sender=alice)
 exchangeBobPart = s.abi_contract(exchangeCode, sender=bob)
 
-pre_image = "10" 
+pre_image = "10"
 block_timeout = 50
 exchangeAlicePart.initialize(utils.sha3(pre_image), block_timeout, utils.privtoaddr(bob), exchangeBobPart.address, goldToken.address, sender=alice)
 exchangeBobPart.initialize(exchangeAlicePart.get_secret(), block_timeout, utils.privtoaddr(alice), 0, silverToken.address, sender=bob)
