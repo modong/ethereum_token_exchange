@@ -156,19 +156,15 @@ The second design goal is also guaranteed because there is a timeout value in th
 
 ### Adversary Case
 
-1. Alice wants to get Bob's token without paying Bob.
+1. Alice wants to get Bob's token without paying Bob. This is not possible because Alice need to first deposit to Bob's contract and two contracts are using the same transfer function. Therefore, she cannot get away with Bob's token.
 
-This is not possible because Alice need to first deposit to Bob's contract and two contracts are using the same transfer function. Therefore, she cannot get away with Bob's token.
-
-2. Bob wants to get Alice's token without paying Alice.
-
+2.Bob wants to get Alice's token without paying Alice.
 This is also not possible because Bob is the passive party (market maker) and he need Alice to call the transfer function to get Alice's token. He also would need to use the same secret as Alice used, otherwise Alice will not deposit her token into his contract.
 
 3. Money get locked forever
-
 This would not happen because we have the refund mechanism in the contract. 
 
 ## Limitations
 
-1. Sloth Attack
+1. Sloth Attack:
 An "Sloth" Attack is possible that Bob just never pays to the Alice's contract. In this case, Alice will suffer loss from spending gas on transferring her token to Bob's account and later refund it. This attack is hard to prevent because two parties are executing code sequetially and therefore, someone can drop out at some point that is unfair for the other. Ethereum should have some data base transaction-like excution to make it work. Another potential solution for this is to have an insurance party involved in these transactions to cover the potential violation.
