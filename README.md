@@ -174,3 +174,7 @@ This would not happen because we have the refund mechanism in the contract.
 
 1. Sloth Attack:
 An "Sloth" Attack is possible that Bob just never pays to the Alice's contract. In this case, Alice will suffer loss from spending gas on transferring her token to Bob's account and later refund it. This attack is hard to prevent because two parties are executing code sequetially and therefore, someone can drop out at some point that is unfair for the other. Ethereum should have some data base transaction-like excution to make it work. Another potential solution for this is to have an insurance party involved in these transactions to cover the potential violation.
+
+## Total Gas Cost
+
+1294877 gas for normal full execution
