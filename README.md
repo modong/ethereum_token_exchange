@@ -1,4 +1,4 @@
-# (Toy-ish but (hopefully?) secure) P2P Token Exchange Contract
+# P2P Token Exchange Contract
 
 ## Introduction
 Ethereum provides the capability to program smart contract and a typical use case for smart contract is to issue new cryptocurrency based on  Ethereum blockchain, for example REP in Augur and SINGL in Singular DTV. Tokens can be exchanged in centralized exchanges like poloniex, but the centralized exchanges always charges for a fee and acting as a central point of failure if the exchange is hacked (e.g. bitfinex recently and Mt.Gox a while ago). This is especially bad for bulk exchanges of cryptocurrency where the fee value is high and the risk of default is high.  There is also a concern about privacy that the exchange knows some information about the token holder usually. 
@@ -92,8 +92,10 @@ def refund(token:address):
 
 ```
 
-### Operation Sequence
+## Operation Sequence
 
+
+### Normal Case
 Let's say Alice and Bob agree to exchange their token at the ratio of 1:1 and the amount of exchange is 500 tokens. They would need to follow the following sequence of operations denoted by the following code:
 ```python
 # Initialization of two tokens
@@ -152,9 +154,21 @@ The above contract apparently satisfies the first goal, because Alice is the one
 
 The second design goal is also guaranteed because there is a timeout value in the contract, if one party drops out during any point of the process with one or both party already deposited token to the contracts, the original owner can retrieve the tokens after the timeout. This is the use of `time_out` and `source` data member in the exchange contract.
 
+### Adversary Case
+
+1. Alice wants to get Bob's token without paying Bob.
+
+This is not possible because Alice need to first deposit to Bob's contract and two contracts are using the same transfer function. Therefore, she cannot get away with Bob's token.
+
+2. Bob wants to get Alice's token without paying Alice.
+
+This is also not possible because Bob is the passive party (market maker) and he need Alice to call the transfer function to get Alice's token. He also would need to use the same secret as Alice used, otherwise Alice will not deposit her token into his contract.
+
+3. Money get locked forever
+
+This would not happen because we have the refund mechanism in the contract. 
 
 ## Limitations
 
-There is one possible attacks the above sequence does not fully mitigate:
-1. Bob knows Alice's password beforehand. Then Alice is vulnerable to Bob taking away her money without getting the exchanged token from Bob.
-
+1. Sloth Attack
+An "Sloth" Attack is possible that Bob just never pays to the Alice's contract. In this case, Alice will suffer loss from spending gas on transferring her token to Bob's account and later refund it. This attack is hard to prevent because two parties are executing code sequetially and therefore, someone can drop out at some point that is unfair for the other. Ethereum should have some data base transaction-like excution to make it work. Another potential solution for this is to have an insurance party involved in these transactions to cover the potential violation.
