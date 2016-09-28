@@ -52,7 +52,6 @@ data secret
 data timeout
 data source
 data is_initialized
-data nounce
 data peer
 data token
 
@@ -61,7 +60,12 @@ def init():
     self.owner = msg.sender
     self.is_initialized = 0
 
+def test_callstack(): 
+    return(1)
+
 def initialize(secret, timeout, source, peer:address, token:address):
+    if self.test_callstack() != 1: 
+        return(-1)
     if msg.sender == self.owner and self.is_initialized == 0:
         self.secret = secret
         self.timeout = timeout
@@ -70,22 +74,24 @@ def initialize(secret, timeout, source, peer:address, token:address):
         self.peer = peer
         self.token = token
 
-def get_nounce():
-    log(type=Notice, text("!!!"), temp)
-    return ( load(self.nounce, chars=2):str )
-
 def get_secret():
+    if self.test_callstack() != 1: 
+        return(-1)
     if self.is_initialized:
         return self.secret
 
 def transfer(nounce:str):
-    temp = sha3(nounce, chars=len(nounce)) 
-    if temp == self.secret:
+    if self.test_callstack() != 1: 
+        return(-1)
+    temp = sha3(nounce, chars=len(nounce))
+    if temp == self.secret and block.number < self.timeout:
         self.token.send_token(self.owner, self.token.get_balance(self), sender=self)
         if self.peer != 0:
             self.peer.transfer(nounce)
 
 def refund(token:address):
+    if self.test_callstack() != 1: 
+        return(-1)
     if block.number > self.timeout:
         token.send_token(self.source, token.get_balance(self), sender=self)
 """
